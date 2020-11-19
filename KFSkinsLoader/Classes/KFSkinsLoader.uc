@@ -15,27 +15,25 @@ struct Skin
 // Config Var for SkinsList
 var config array<Skin> CustomSkin;
 var config float fReplacementTimer;
-var config string sNotifyOnSkinChange;
-var config bool bForceCustomChars, bImplementAsServerPackages, bDebug;
+var config bool bForceCustomChars, bDebug;
 
 // Mut Vars
 var transient array<name> AddedServerPackages;
 var array<PlayerController> PendingPlayers;
 
-
 function PreBeginPlay()
 {
-  // Critical | If you do not want to add skins as ServerPackages, set this to true
-  if(bImplementAsServerPackages) AddSkinsToServer();
+  // Critical
+  AddSkinsToServer();
 }
 
-// Trigger
 function PostBeginPlay()
 {
   // Apply Default Config, uncomment to generate default .ini
 	SaveConfig();
 }
 
+// Add Skins to AvailableChars list
 function bool AddCustomSkins()
 {
 	local int i, j;
@@ -49,6 +47,7 @@ function bool AddCustomSkins()
   return true;
 }
 
+// Add Skins to server as ServerPackages
 function AddSkinsToServer()
 {
   local int i;
@@ -63,6 +62,7 @@ function AddSkinsToServer()
 	}
 }
 
+// Check is Skin is already added
 function bool SkinAlreadyAdded(string SkinCode)
 {
 	local int i;
@@ -141,8 +141,6 @@ defaultproperties
 
   // Default Config
   bDebug = True
-  bForceCustomChars = False
-  bImplementAsServerPackages = True
+  bForceCustomChars = True
   fReplacementTimer = 5
-  // CustomSkin(0)=(SkinCode="KFSkinsLoader.iDoNotExist",AddDate="01.01.1945")
 }
