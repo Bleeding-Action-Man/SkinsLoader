@@ -41,7 +41,7 @@ function bool AddCustomSkins()
   for(i=0;i<CustomSkin.Length;i++)
   {
     j = KFGameType(Level.Game).AvailableChars.Length;
-	  if(!SkinAlreadyAdded(CustomSkin[i].SkinCode)) KFGameType(Level.Game).AvailableChars[j] = CustomSkin[i].SkinCode;
+    if(!SkinAlreadyAdded(CustomSkin[i].SkinCode)) KFGameType(Level.Game).AvailableChars[j] = CustomSkin[i].SkinCode;
   }
 
   return true;
@@ -56,8 +56,8 @@ function AddSkinsToServer()
   if(bDebug) MutLog("-----|| DEBUG - Found [" $CustomSkin.Length$ "] Skins in Config||-----");
   for( i=0; i<CustomSkin.Length; ++i )
   {
-	  SplitStringToArray(PackageName, CustomSkin[i].SkinCode, ".");
-	  AddToPackageMap(PackageName[0]);
+    SplitStringToArray(PackageName, CustomSkin[i].SkinCode, ".");
+    AddToPackageMap(PackageName[0]);
     if(bDebug) MutLog("-----|| DEBUG - Skin [" $PackageName[0]$ "] Added to ServerPackages ||-----");
   }
 }
@@ -77,7 +77,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
   if(PlayerController(Other)!=None)
   {
-  	PendingPlayers[PendingPlayers.Length] = PlayerController(Other);
+    PendingPlayers[PendingPlayers.Length] = PlayerController(Other);
     SetTimer(fReplacementTimer, false);
   }
 
@@ -89,7 +89,7 @@ function Timer()
   local int i;
   for(i=0;i<PendingPlayers.Length;i++)
   {
-  	if(PendingPlayers[i]!=None) LoadSkinsToPlayers(PendingPlayers[i]);
+    if(PendingPlayers[i]!=None) LoadSkinsToPlayers(PendingPlayers[i]);
   }
 
   PendingPlayers.Length = 0;
