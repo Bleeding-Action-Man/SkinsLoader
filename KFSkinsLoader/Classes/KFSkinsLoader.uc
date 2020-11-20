@@ -87,7 +87,7 @@ function Timer()
   local int i;
   for(i=0;i<PendingPlayers.Length;i++)
   {
-    if(PendingPlayers[i]!=None) LoadSkinsToPlayers(PendingPlayers[i]);
+    if(PendingPlayers[i]!=None) ForceSkins(PendingPlayers[i]);
   }
 
   PendingPlayers.Length = 0;
@@ -101,13 +101,13 @@ function Tick(float dt)
 }
 
 // Load all Skins to players, Force select if bForceCustomChars = True
-function LoadSkinsToPlayers(PlayerController PC)
+function ForceSkins(PlayerController PC)
 {
-  local int i;
+  /*local int i;
   for(i=0; i < CustomSkin.Length; i++)
   {
     PC.SetPawnClass("", CustomSkin[i].SkinCode);
-  }
+  }*/
 
   if(bForceCustomChars) PC.PlayerReplicationInfo.SetCharacterName(CustomSkin[Rand(CustomSkin.Length)].SkinCode);
 }
