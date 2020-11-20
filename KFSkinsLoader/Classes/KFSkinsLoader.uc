@@ -15,7 +15,7 @@ struct Skin
 // Config Var for SkinsList
 var config array<Skin> CustomSkin;
 var config float fReplacementTimer;
-var config bool bForceCustomChars, bDebug;
+var config bool bForceCustomChars, bAddAsServerPackages, bDebug;
 
 // Mut Vars
 var transient array<name> AddedServerPackages;
@@ -24,7 +24,7 @@ var array<PlayerController> PendingPlayers;
 function PreBeginPlay()
 {
   // Critical
-  AddSkinsToServer();
+  if(bAddAsServerPackages) AddSkinsToServer();
 }
 
 function PostBeginPlay()
@@ -43,7 +43,6 @@ function bool AddCustomSkins()
     j = KFGameType(Level.Game).AvailableChars.Length;
     if(!SkinAlreadyAdded(CustomSkin[i].SkinCode)) KFGameType(Level.Game).AvailableChars[j] = CustomSkin[i].SkinCode;
   }
-
   return true;
 }
 
@@ -80,7 +79,6 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
     PendingPlayers[PendingPlayers.Length] = PlayerController(Other);
     SetTimer(fReplacementTimer, false);
   }
-
   return true;
 }
 
@@ -140,4 +138,5 @@ defaultproperties
   bDebug = True
   bForceCustomChars = True
   fReplacementTimer = 5
+  bAddAsServerPackages = True
 }
