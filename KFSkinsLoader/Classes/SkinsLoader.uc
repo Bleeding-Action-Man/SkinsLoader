@@ -19,6 +19,16 @@ var config float fReplacementTimer;
 var config bool bForceCustomChars, bAddAsServerPackages;
 var config string sUseSkinCMD, sPrintSkinsCMD;
 
+// Colors from Config
+struct ColorRecord
+{
+  var config string ColorName; // Color name, for comfort
+  var config string ColorTag; // Color tag
+  var config Color Color; // RGBA values
+};
+var() config array<ColorRecord> ColorList; // Color list
+
+
 // Mut Vars
 var transient array<name> AddedServerPackages;
 var array<PlayerController> PendingPlayers;
@@ -141,6 +151,7 @@ function bool UseSkin(int index, string PlayerName, PlayerController PC)
 
 function PrintAllSkins(PlayerController PC)
 {
+  local int i;
   local string SkinEntry;
 
   for(i=0; i < CustomSkin.Length; i++)
@@ -183,14 +194,14 @@ function Mutate(string command, PlayerController Sender)
     return;
   }
 
-  if(command ~= "!skins" )
+  if(command ~= sPrintSkinsCMD)
   {
     PrintAllSkins(Sender);
   }
 
-  if(Left(command, Len(sPlaySoundCMD)) ~= sUseSkinCMD)
+  if(Left(command, Len(sUseSkinCMD)) ~= sUseSkinCMD)
   {
-    UseSkin(SplitCMD[1], PN, Sender);
+    UseSkin(int(SplitCMD[1]), PN, Sender);
   }
 
   if (NextMutator != None ) NextMutator.Mutate(command, Sender);
