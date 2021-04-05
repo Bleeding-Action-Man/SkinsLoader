@@ -1,0 +1,82 @@
+Load & Apply skins without using ServerPerks
+
+- Simple configuration
+- Customizable commands
+
+[h1][b][u]Important Notes (Missing features)[/u][/b][/h1]
+
+Feel free to help me add these features whenever you want:
+
++ = Easy
+++ = Hard/Complex (For me >.>)
+
+TODO: New ModelList that refreshes skins | ++
+TODO: Unlock DLC Skins (?) | ++
+TODO: Refresh Portrait / Model on player joining (if ForceSkins is enabled) | ++
+TODO: Refresh Portrait if player applies skin before joining | ++
+TODO: Save every picked skin for each player so they won't have to apply their skins on joining +
+
+[h1][b][u]Whitelist Status[/u][/b][/h1]
+
+- NO | Mutator itself is whitelisted, but the 'Skins' are not.
+
+[h1][b][u]Credits[/u][/b][/h1]
+
+- Flame, Essence, Me
+
+[h1][b][u]Number Of Files[/u][/b][/h1]
+
+- 3
+
+[h1][b][u]Sample Config[/u][/b][/h1]
+
+[code]
+[SkinsLoader.SkinsLoader]
+# Command used by players to apply a skin
+sUseSkinCMD=use
+# Command used by players to print all skins
+sPrintSkinsCMD=!skins
+# If true, all players will be forced a random skin when joining
+bForceCustomChars=True
+# Don't touch this ;D
+fReplacementTimer=5.000000
+# Don't touch this, too ;D
+bAddAsServerPackages=True
+# Custom Skins list, here you can put any skin you want and fill it's information
+# make sure your sSkinCode is correct
+# Players can apply the skins using their ID
+# e.g mutate use 2 (Will apply the skin of iSkinID=2)
+# Skins are also identified by their description, so put a clear, short, simply description
+CustomSkin=(sSkinCode="SynthoidMut.Synthoid",sSkinDescription="Robot1",iSkinID=1,sAddDate="01.01.1945")
+CustomSkin=(sSkinCode="EM208rMut.EM208r",sSkinDescription="Robot2",iSkinID=2,sAddDate="01.01.1945")
+CustomSkin=(sSkinCode="VanquishMut.Vanquish",sSkinDescription="Robot3",iSkinID=3,sAddDate="01.01.1945")
+# Color Tags for messages | Do not change ;D
+ColorList=(ColorName="Red",ColorTag="%r",Color=(B=0,G=0,R=200,A=0))
+ColorList=(ColorName="Orange",ColorTag="%o",Color=(B=0,G=127,R=255,A=0))
+ColorList=(ColorName="Yellow",ColorTag="%y",Color=(B=0,G=255,R=255,A=0))
+ColorList=(ColorName="Green",ColorTag="%g",Color=(B=0,G=200,R=0,A=0))
+ColorList=(ColorName="Blue",ColorTag="%b",Color=(B=200,G=100,R=0,A=0))
+ColorList=(ColorName="Teal",ColorTag="%t",Color=(B=113,G=179,R=60,A=0))
+ColorList=(ColorName="Violet",ColorTag="%v",Color=(B=139,G=0,R=255,A=0))
+ColorList=(ColorName="White",ColorTag="%w",Color=(B=200,G=200,R=200,A=0))
+[/code]
+
+[h1][b][u]File Names[/u][/b][/h1]
+
+- \System\SkinsLoader.u
+- \System\SkinsLoader.ucl
+- \System\SkinsLoader_Config.ini
+
+[h1][b][u]Usage[/u][/b][/h1]
+
+1- Subscribe or download manually (Recommended)
+2- Launch the game and wait to see 'Completed'
+3- Restart the game and you can see the mutators in your list
+
+[h1][b][u]Class Names[/u][/b][/h1]
+
+- Mut: SkinsLoader.SkinsLoader
+
+[h1][b][u]Manual Download Links (Recommended)[/u][/b][/h1]
+
+Github: https://github.com/Vel-San/KF-SkinsLoader/releases/tag/v1.0
