@@ -64,7 +64,7 @@ function AddSkinsToServer()
   local int i;
   local array<string> PackageName;
 
-  MutLog("-----|| Found [" $CustomSkin.Length$ "] Skins in Config||-----");
+  MutLog("-----|| Found [" $CustomSkin.Length$ "] Skins in Config ||-----");
   for( i=0; i<CustomSkin.Length; ++i )
   {
   SplitStringToArray(PackageName, CustomSkin[i].sSkinCode, ".");
@@ -129,8 +129,8 @@ function bool UseSkin(int index, string PlayerName, PlayerController PC)
   local int i;
   local string SuccessMSG, FailedMSG;
 
-  SuccessMSG = "Skin %gSuccessfully%w Applied!";
-  FailedMSG = "Skin %rSFailed%w to apply! Retry & check the skin index.";
+  SuccessMSG = "%bSkin %gSuccessfully%w Applied!";
+  FailedMSG = "%bSkin %rSFailed%w to apply! Retry & check the skin index.";
 
   for(i=0; i < CustomSkin.Length; i++)
   {
@@ -156,7 +156,7 @@ function PrintAllSkins(PlayerController PC)
 
   for(i=0; i < CustomSkin.Length; i++)
   {
-    SkinEntry = "Desc.: %b" $CustomSkin[i].sSkinDescription$ "%w ID: %y" $CustomSkin[i].iSkinID$ "%w Added at: %o" $CustomSkin[i].sAddDate;
+    SkinEntry = "%bDesc.: %t" $CustomSkin[i].sSkinDescription$ "%w | ID: %y" $CustomSkin[i].iSkinID$ "%w | Added at: %o" $CustomSkin[i].sAddDate;
     SetColor(SkinEntry);
     PC.ClientMessage(SkinEntry);
   }
