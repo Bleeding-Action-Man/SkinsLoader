@@ -1,6 +1,11 @@
 //////////////////////////////////////////////
 // Load custom skins without ServerPerks
 // Originally made by Flame, Edited by Vel-San
+// TODO: New ModelList that refreshes skins
+// TODO: Unlock DLC Skins (?)
+// TODO: Refresh Portrait / Model on player joining (if ForceSkins is enabled)
+// TODO: Refresh Portrait if player applies skin before joining
+// TODO: Save every picked skin for each player
 //////////////////////////////////////////////
 
 class SkinsLoader extends Mutator Config(SkinsLoader_Config);
@@ -37,12 +42,7 @@ function PreBeginPlay()
 {
   // Critical
   if(bAddAsServerPackages) AddSkinsToServer();
-}
-
-function PostBeginPlay()
-{
-  // Apply Default Config, uncomment to generate default .ini
-  // SaveConfig();
+  AddCustomSkins();
 }
 
 // Add Skins to AvailableChars list
@@ -52,8 +52,8 @@ function bool AddCustomSkins()
 
   for(i=0;i<CustomSkin.Length;i++)
   {
-  j = KFGameType(Level.Game).AvailableChars.Length;
-  if(!SkinAlreadyAdded(CustomSkin[i].sSkinCode)) KFGameType(Level.Game).AvailableChars[j] = CustomSkin[i].sSkinCode;
+    j = KFGameType(Level.Game).AvailableChars.Length;
+    if(!SkinAlreadyAdded(CustomSkin[i].sSkinCode)) KFGameType(Level.Game).AvailableChars[j] = CustomSkin[i].sSkinCode;
   }
   return true;
 }
@@ -67,9 +67,9 @@ function AddSkinsToServer()
   MutLog("-----|| Found [" $CustomSkin.Length$ "] Skins in Config ||-----");
   for( i=0; i<CustomSkin.Length; ++i )
   {
-  SplitStringToArray(PackageName, CustomSkin[i].sSkinCode, ".");
-  AddToPackageMap(PackageName[0]);
-  MutLog("-----|| Skin [" $PackageName[0]$ "] Added to ServerPackages ||-----");
+    SplitStringToArray(PackageName, CustomSkin[i].sSkinCode, ".");
+    AddToPackageMap(PackageName[0]);
+    MutLog("-----|| Skin [" $PackageName[0]$ "] Added to ServerPackages ||-----");
   }
 }
 
@@ -79,7 +79,7 @@ function bool SkinAlreadyAdded(string sSkinCode)
   local int i;
   for(i=0;i<KFGameType(Level.Game).AvailableChars.Length;i++)
   {
-  if(KFGameType(Level.Game).AvailableChars[i] ~= sSkinCode) return true;
+    if(KFGameType(Level.Game).AvailableChars[i] ~= sSkinCode) return true;
   }
   return false;
 }
@@ -88,8 +88,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
   if(PlayerController(Other)!=None)
   {
-  PendingPlayers[PendingPlayers.Length] = PlayerController(Other);
-  SetTimer(fReplacementTimer, false);
+    PendingPlayers[PendingPlayers.Length] = PlayerController(Other);
+    SetTimer(fReplacementTimer, false);
   }
   return true;
 }
@@ -99,28 +99,15 @@ function Timer()
   local int i;
   for(i=0;i<PendingPlayers.Length;i++)
   {
-  if(PendingPlayers[i]!=None) ForceSkins(PendingPlayers[i]);
+    if(PendingPlayers[i]!=None) ForceSkins(PendingPlayers[i]);
   }
 
-  PendingPlayers.Length = 0;
-}
-
-function Tick(float dt)
-{
-  // Add Custom Skins
-  if(AddCustomSkins()) Disable('Tick');
-  Super.Tick(dt);
+  PendingPlayers.Remove(0, 1);
 }
 
 // Load all Skins to players, Force select if bForceCustomChars = True
 function ForceSkins(PlayerController PC)
 {
-  /*local int i;
-  for(i=0; i < CustomSkin.Length; i++)
-  {
-  PC.SetPawnClass("", CustomSkin[i].sSkinCode);
-  }*/
-
   if(bForceCustomChars) PC.PlayerReplicationInfo.SetCharacterName(CustomSkin[Rand(CustomSkin.Length)].sSkinCode);
 }
 
@@ -134,14 +121,14 @@ function bool UseSkin(int index, string PlayerName, PlayerController PC)
 
   for(i=0; i < CustomSkin.Length; i++)
   {
-  if(CustomSkin[i].iSkinID == index)
-    {
-      MutLog("-----|| " $PlayerName$ " Applied skin of index: " $index$ " ||-----");
-      PC.PlayerReplicationInfo.SetCharacterName(CustomSkin[i].sSkinCode);
-      SetColor(SuccessMSG);
-      PC.ClientMessage(SuccessMSG);
-      return true;
-    }
+    if(CustomSkin[i].iSkinID == index)
+      {
+        MutLog("-----|| " $PlayerName$ " Applied skin of index: " $index$ " ||-----");
+        PC.PlayerReplicationInfo.SetCharacterName(CustomSkin[i].sSkinCode);
+        SetColor(SuccessMSG);
+        PC.ClientMessage(SuccessMSG);
+        return true;
+      }
   }
 
   SetColor(FailedMSG);
@@ -231,10 +218,10 @@ function SetColor(out string Msg)
   local int i;
   for(i=0; i<ColorList.Length; i++)
   {
-  if(ColorList[i].ColorTag!="" && InStr(Msg, ColorList[i].ColorTag)!=-1)
-  {
-  ReplaceText(Msg, ColorList[i].ColorTag, FormatTagToColorCode(ColorList[i].ColorTag, ColorList[i].Color));
-  }
+    if(ColorList[i].ColorTag!="" && InStr(Msg, ColorList[i].ColorTag)!=-1)
+      {
+        ReplaceText(Msg, ColorList[i].ColorTag, FormatTagToColorCode(ColorList[i].ColorTag, ColorList[i].Color));
+      }
   }
 }
 
@@ -264,5 +251,4 @@ defaultproperties
   GroupName="KF-SkinsLoader"
   FriendlyName="Skins Loader - v1.0"
   Description="Load custom skins into the game without ServerPerks; Originally made by Flame, Edited by Vel-San"
-  // bAddAsServerPackages = True
 }
