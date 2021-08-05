@@ -40,18 +40,15 @@ var SkinsLoader Mut;
 replication
 {
   unreliable if (Role == ROLE_Authority)
-                  aCustomSkin;
+                  CustomSkin, aCustomSkin;
 }
 
 function PreBeginPlay()
 {
-  if (Level.NetMode != NM_Client)
-  {
-    // Critical: Force clients to download the skins packages
-    if(bAddAsServerPackages) AddSkinsToServer();
-    // Add the skins to the server
-    AddCustomSkins();
-  }
+  // Critical: Force clients to download the skins packages
+  if(bAddAsServerPackages) AddSkinsToServer();
+  // Add the skins to the server
+  AddCustomSkins();
 }
 
 simulated function PostBeginPlay()
@@ -64,34 +61,11 @@ simulated function PostBeginPlay()
   default.Mut = self;
   class'SkinsLoader'.default.Mut = self;
 
-  // Fill in the Dynamic Array of Special Players
   for(i=0; i<CustomSkin.Length; i=i++)
   {
     aCustomSkin[i] = CustomSkin[i].sSkinCode;
   }
-
-  // ParseSkinsToPlayerRecords(aCustomSkin);
 }
-
-/*function ParseSkinsToPlayerRecords(array<string> CS)
-{
-  local int i;
-  local xUtil.PlayerRecord PR;
-
-  for( i=0; i<CS.Length; ++i )
-  {
-      PR = Class'xUtil'.Static.FindPlayerRecord(CS[i]);
-      MutLog("-----|| PlayerRecord SPECIES [" $PR.Species$ "] ||-----");
-      MutLog("-----|| PlayerRecord TEXT NAME [" $PR.TextName$ "] ||-----");
-
-      // if( PR.DefaultName~=C )
-      // {
-      //     ++CustomOffset;
-      //     PlayerList.Insert(0,1);
-      //     PlayerList[0] = PR;
-      // }
-  }
-}*/
 
 // Add Skins to AvailableChars list
 function bool AddCustomSkins()
