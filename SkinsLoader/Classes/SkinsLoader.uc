@@ -33,17 +33,69 @@ struct ColorRecord
 };
 var() config array<ColorRecord> ColorList; // Color list
 
-
 // Mut Vars
 var transient array<name> AddedServerPackages;
 var array<PlayerController> PendingPlayers;
+var array<string> aCustomSkin;
+
+// V. Important Pointer to Self
+var SkinsLoader Mut;
+
+replication
+{
+  unreliable if (Role == ROLE_Authority)
+                  aCustomSkin;
+}
 
 function PreBeginPlay()
 {
-  // Critical
-  if(bAddAsServerPackages) AddSkinsToServer();
-  AddCustomSkins();
+  if (Level.NetMode != NM_Client)
+  {
+    // Critical: Force clients to download the skins packages
+    if(bAddAsServerPackages) AddSkinsToServer();
+    // Add the skins to the server
+    AddCustomSkins();
+  }
 }
+
+simulated function PostBeginPlay()
+{
+  // Local Vars
+  local int i;
+
+  // Pointer To self
+  Mut = self;
+  default.Mut = self;
+  class'SkinsLoader'.default.Mut = self;
+
+  // Fill in the Dynamic Array of Special Players
+  for(i=0; i<CustomSkin.Length; i=i++)
+  {
+    aCustomSkin[i] = CustomSkin[i].sSkinCode;
+  }
+
+  // ParseSkinsToPlayerRecords(aCustomSkin);
+}
+
+/*function ParseSkinsToPlayerRecords(array<string> CS)
+{
+  local int i;
+  local xUtil.PlayerRecord PR;
+
+  for( i=0; i<CS.Length; ++i )
+  {
+      PR = Class'xUtil'.Static.FindPlayerRecord(CS[i]);
+      MutLog("-----|| PlayerRecord SPECIES [" $PR.Species$ "] ||-----");
+      MutLog("-----|| PlayerRecord TEXT NAME [" $PR.TextName$ "] ||-----");
+
+      // if( PR.DefaultName~=C )
+      // {
+      //     ++CustomOffset;
+      //     PlayerList.Insert(0,1);
+      //     PlayerList[0] = PR;
+      // }
+  }
+}*/
 
 // Add Skins to AvailableChars list
 function bool AddCustomSkins()
@@ -103,6 +155,18 @@ function Timer()
   }
 
   PendingPlayers.Remove(0, 1);
+}
+
+simulated function Tick(float DeltaTime) {
+  local PlayerController localController;
+
+  MutLog("-----|| Injecting Skin Loader's 'Custom Model List' ||-----");
+
+  localController= Level.GetLocalPlayerController();
+  if (localController != none) {
+      localController.Player.InteractionMaster.AddInteraction("SkinsLoader.CustomInteraction", localController.Player);
+  }
+  Disable('Tick');
 }
 
 // Load all Skins to players, Force select if bForceCustomChars = True
@@ -249,6 +313,10 @@ defaultproperties
 {
   // Mandatory Vars
   GroupName="KF-SkinsLoader"
-  FriendlyName="Skins Loader - v1.0"
-  Description="Load custom skins into the game without ServerPerks; Originally made by Flame, Edited by Vel-San"
+  FriendlyName="Skins Loader - v2.0"
+  Description="Load custom skins into the game without ServerPerks; Written by Vel-San, Flame & Marco"
+  bAddToServerPackages = true
+  RemoteRole = ROLE_SimulatedProxy
+  bAlwaysRelevant = true
+  bNetNotify=true
 }
