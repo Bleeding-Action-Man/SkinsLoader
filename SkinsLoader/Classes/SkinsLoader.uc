@@ -1,11 +1,7 @@
 //////////////////////////////////////////////
 // Load custom skins without ServerPerks
 // Originally made by Flame, Edited by Vel-San
-// TODO: New ModelList that refreshes skins
 // TODO: Unlock DLC Skins (?)
-// TODO: Refresh Portrait / Model on player joining (if ForceSkins is enabled)
-// TODO: Refresh Portrait if player applies skin before joining
-// TODO: Save every picked skin for each player
 //////////////////////////////////////////////
 
 class SkinsLoader extends Mutator Config(SkinsLoader_Config);
@@ -315,6 +311,7 @@ defaultproperties
   GroupName="KF-SkinsLoader"
   FriendlyName="Skins Loader - v2.0"
   Description="Load custom skins into the game without ServerPerks; Written by Vel-San, Flame & Marco"
+
   bAddToServerPackages = true
   RemoteRole = ROLE_SimulatedProxy
   bAlwaysRelevant = true

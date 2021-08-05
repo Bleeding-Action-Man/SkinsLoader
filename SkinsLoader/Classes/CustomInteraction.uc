@@ -16,7 +16,3 @@ function Tick (float DeltaTime) {
     KFPlayerController(ViewportOwner.Actor).ClientOpenMenu("SkinsLoader.Custom_ModelList");
   }
 }
-
-defaultproperties {
-  bActive=true
-}
