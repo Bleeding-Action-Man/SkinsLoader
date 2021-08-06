@@ -37,7 +37,7 @@ function ParseSkinsToPlayerRecords(array<string> CS)
   {
     // Get PlayerRecord for the skin
     PR = Class'xUtil'.Static.FindPlayerRecord(CS[i]);
-    log("Found skin of species: "$PR.Species);
+    // log("Found skin of species: "$PR.Species);
 
     // Add this "PR" to the PlayerList
     PlayerList.Insert(0,1);

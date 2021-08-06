@@ -99,7 +99,7 @@ function AddSkinsToServer()
   }
 }
 
-// Check is Skin is already added
+// Check if Skin is already added
 function bool SkinAlreadyAdded(string sSkinCode)
 {
   local int i;
@@ -134,13 +134,17 @@ function Timer()
 simulated function Tick(float DeltaTime) {
   local PlayerController localController;
 
-  MutLog("-----|| Injecting Skin Loader's 'Custom Model List' ||-----");
+  // Avoid server calling interaction, only clients
+  if (Level.NetMode != NM_DedicatedServer)
+  {
+    MutLog("-----|| Injecting SkinLoader's Interaction ||-----");
 
-  localController= Level.GetLocalPlayerController();
-  if (localController != none) {
-      localController.Player.InteractionMaster.AddInteraction("SkinsLoader.CustomInteraction", localController.Player);
+    localController= Level.GetLocalPlayerController();
+    if (localController != none) {
+        localController.Player.InteractionMaster.AddInteraction("SkinsLoader.CustomInteraction", localController.Player);
+    }
   }
-  Disable('Tick');
+    Disable('Tick');
 }
 
 // Load all Skins to players, Force select if bForceCustomChars = True
@@ -157,8 +161,8 @@ function bool UseSkin(int index, string PlayerName, PlayerController PC)
   local int i;
   local string SuccessMSG, FailedMSG;
 
-  SuccessMSG = "%bSkin %gSuccessfully%w Applied!";
-  FailedMSG = "%bSkin %rSFailed%w to apply! Retry & check the skin index.";
+  SuccessMSG = "%bSkin '$CustomSkin[i].sSkinDescription$' %gSuccessfully%w Applied!";
+  FailedMSG = "%bSkin '$CustomSkin[i].sSkinDescription$' %rSFailed%w to apply! Retry & check the skin index.";
 
   for(i=0; i < CustomSkin.Length; i++)
   {
@@ -293,8 +297,8 @@ defaultproperties
   FriendlyName="Skins Loader - v2.0"
   Description="Load custom skins into the game without ServerPerks; Written by Vel-San, Flame & Marco"
 
-  bAddToServerPackages = true
-  RemoteRole = ROLE_SimulatedProxy
-  bAlwaysRelevant = true
+  bAddToServerPackages=true
+  RemoteRole=ROLE_SimulatedProxy
+  bAlwaysRelevant=true
   bNetNotify=true
 }
