@@ -2,6 +2,8 @@
 
 class CustomInteraction extends Interaction;
 
+var string lobbyMenuClass;
+
 event NotifyLevelChange() {
   Master.RemoveInteraction(self);
 }
@@ -11,8 +13,17 @@ function Tick (float DeltaTime) {
 
   guiController= KFGUIController(ViewportOwner.GUIController);
   if (guiController != none && guiController.ActivePage != none && 
-      ClassIsChildOf(guiController.ActivePage.class, class'KFGui.KFModelSelect')) {
+      ClassIsChildOf(guiController.ActivePage.class, class'KFGui.LobbyMenu')) {
+    KFPlayerController(ViewportOwner.Actor).LobbyMenuClassString=lobbyMenuClass;
     ViewportOwner.Actor.ClientCloseMenu(true, true);
-    KFPlayerController(ViewportOwner.Actor).ClientOpenMenu("SkinsLoader.Custom_ModelList");
+    KFPlayerController(ViewportOwner.Actor).ShowLobbyMenu();
+
+    bRequiresTick = false;
   }
+}
+
+defaultproperties {
+  bRequiresTick=true
+
+  lobbyMenuClass="SkinsLoader.Custom_LobbyMenu"
 }

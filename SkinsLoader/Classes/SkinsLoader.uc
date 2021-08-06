@@ -45,6 +45,8 @@ replication
 
 function PreBeginPlay()
 {
+	Super.PreBeginPlay();
+
   // Critical: Force clients to download the skins packages
   if(bAddAsServerPackages) AddSkinsToServer();
   // Add the skins to the server
@@ -55,6 +57,8 @@ simulated function PostBeginPlay()
 {
   // Local Vars
   local int i;
+
+	Super.PostBeginPlay();
 
   // Pointer To self
   Mut = self;
@@ -142,7 +146,10 @@ simulated function Tick(float DeltaTime) {
 // Load all Skins to players, Force select if bForceCustomChars = True
 function ForceSkins(PlayerController PC)
 {
-  if(bForceCustomChars) PC.PlayerReplicationInfo.SetCharacterName(CustomSkin[Rand(CustomSkin.Length)].sSkinCode);
+  if (CustomSkin.Length > 0)
+  {
+    if(bForceCustomChars) PC.PlayerReplicationInfo.SetCharacterName(CustomSkin[Rand(CustomSkin.Length)].sSkinCode);
+  }
 }
 
 function bool UseSkin(int index, string PlayerName, PlayerController PC)
